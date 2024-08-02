@@ -1,6 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
+pub struct TokenClaims {
+	pub user_id: String,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct NewMessage {
 	// change to encrypted message
 	pub content: String,
