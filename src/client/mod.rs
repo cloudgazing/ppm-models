@@ -61,3 +61,9 @@ pub struct SignupData {
 	pub password: String,
 	pub display_name: String,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub enum AuthData {
+	Login(LoginData),
+	Signup(SignupData),
+}
