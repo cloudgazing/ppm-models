@@ -49,3 +49,9 @@ impl<'a> SignupConfirmation<'a> {
 		serde_json::to_string(self)
 	}
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum BasicResponse<T> {
+	Ok(T),
+	Err,
+}
