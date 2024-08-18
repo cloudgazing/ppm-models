@@ -1,14 +1,81 @@
-// sent bytes not a valid utf8 string
-pub const AUTH_INVALID_BYTES: &str = "Invalid bytes";
-// invalid login data
-pub const AUTH_INVALID_LOGIN_DATA: &str = "Invalid login data";
-// invalid signup data
-pub const AUTH_INVALID_SIGNUP_DATA: &str = "Invalid signup data";
-// internal error
-pub const AUTH_INTERNAL_ERROR: &str = "Internal error";
-// login username not found
-pub const LOGIN_USERNAME_NOT_FOUND: &str = "Username not found";
-// wrong login password
-pub const LOGIN_WRONG_PASSWORD: &str = "Wrong password";
-// signup username already exists
+use serde::{Deserialize, Serialize};
+
+pub const SERVER_INTERNAL_ERROR: &str = "Internal server error";
+pub const USER_INVALID_CLAIMS: &str = "Invalid user claims";
+
+pub const AUTH_INVALID_FORMAT: &str = "Invalid data format";
+pub const AUTH_INVALID_REQUEST_DATA: &str = "Invalid data";
+pub const LOGIN_WRONG_CREDENTIALS: &str = "Wrong credentials";
 pub const SIGNUP_USERNAME_TAKEN: &str = "Username already taken";
+
+pub const MESSAGE_USER_NOT_FOUND: &str = "User not found";
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum LoginError {
+	Internal,
+	InvalidFormat,
+	InvalidData,
+	WrongCredentials,
+}
+
+impl LoginError {
+	pub fn as_str(&self) -> &'static str {
+		match self {
+			Self::Internal => SERVER_INTERNAL_ERROR,
+			Self::InvalidFormat => AUTH_INVALID_FORMAT,
+			Self::InvalidData => AUTH_INVALID_REQUEST_DATA,
+			Self::WrongCredentials => LOGIN_WRONG_CREDENTIALS,
+		}
+	}
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum SignupError {
+	Internal,
+	InvalidFormat,
+	InvalidData,
+	UsernameTaken,
+}
+
+impl SignupError {
+	pub fn as_str(&self) -> &'static str {
+		match self {
+			Self::Internal => SERVER_INTERNAL_ERROR,
+			Self::InvalidFormat => AUTH_INVALID_FORMAT,
+			Self::InvalidData => AUTH_INVALID_REQUEST_DATA,
+			Self::UsernameTaken => SIGNUP_USERNAME_TAKEN,
+		}
+	}
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum MessageStatusError {
+	Internal,
+	Claims,
+	UserNotFound,
+}
+
+impl MessageStatusError {
+	pub fn as_str(&self) -> &'static str {
+		match self {
+			Self::Internal => SERVER_INTERNAL_ERROR,
+			Self::Claims => USER_INVALID_CLAIMS,
+			Self::UserNotFound => MESSAGE_USER_NOT_FOUND,
+		}
+	}
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum VerifyError {
+	InvalidFormat,
+	Claims,
+}
+
+impl VerifyError {
+	pub fn as_str(&self) -> &'static str {
+		match self {
+			Self::InvalidFormat => AUTH_INVALID_FORMAT,
+			Self::Claims => USER_INVALID_CLAIMS,
+		}
+	}
+}

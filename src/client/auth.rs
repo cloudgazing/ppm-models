@@ -6,24 +6,17 @@ pub struct LoginData<'a> {
 	pub password: &'a str,
 }
 
+impl<'a> LoginData<'a> {
+	pub fn new(username: &'a str, password: &'a str) -> Self {
+		Self { username, password }
+	}
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SignupData<'a> {
 	pub username: &'a str,
 	pub password: &'a str,
 	pub display_name: &'a str,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub enum Auth<'a> {
-	#[serde(borrow)]
-	Login(LoginData<'a>),
-	Signup(SignupData<'a>),
-}
-
-impl<'a> LoginData<'a> {
-	pub fn new(username: &'a str, password: &'a str) -> Self {
-		Self { username, password }
-	}
 }
 
 impl<'a> SignupData<'a> {
@@ -34,4 +27,11 @@ impl<'a> SignupData<'a> {
 			display_name,
 		}
 	}
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub enum Auth<'a> {
+	#[serde(borrow)]
+	Login(LoginData<'a>),
+	Signup(SignupData<'a>),
 }
