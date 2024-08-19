@@ -19,9 +19,8 @@ pub enum Status {
 
 /// A confirmation from the server that lets the client know if the message was sent or something went wrong.
 #[derive(Debug, Deserialize, Serialize)]
-pub struct MessageStatus {
-	/// The receiver's user ID.
-	pub user_id: String,
+pub struct MessageStatus<'a> {
+	pub message_id: &'a str,
 	/// Status update from the server.
 	pub status: Status,
 }
@@ -30,7 +29,7 @@ pub struct MessageStatus {
 pub enum Notification<'a> {
 	#[serde(borrow)]
 	NewMessage(NewMessage<'a>),
-	MessageStatus(MessageStatus),
+	MessageStatus(MessageStatus<'a>),
 }
 
 /// The server sends a keep alive message roughly every 40 seconds to keep the connection alive.
@@ -56,20 +55,20 @@ impl<'a> ServerMessage<'a> {
 		Self::Notification(Notification::NewMessage(NewMessage { user_id, content }))
 	}
 
-	pub fn message_status(user_id: String, status: Status) -> Self {
-		Self::Notification(Notification::MessageStatus(MessageStatus { user_id, status }))
+	pub fn message_status(message_id: &'a str, status: Status) -> Self {
+		Self::Notification(Notification::MessageStatus(MessageStatus { message_id, status }))
 	}
 
-	pub fn successful_message_status(user_id: String) -> Self {
+	pub fn successful_message_status(message_id: &'a str) -> Self {
 		Self::Notification(Notification::MessageStatus(MessageStatus {
-			user_id,
+			message_id,
 			status: Status::Success,
 		}))
 	}
 
-	pub fn error_message_status(user_id: String, error: MessageStatusError) -> Self {
+	pub fn error_message_status(message_id: &'a str, error: MessageStatusError) -> Self {
 		Self::Notification(Notification::MessageStatus(MessageStatus {
-			user_id,
+			message_id,
 			status: Status::Error(error),
 		}))
 	}
