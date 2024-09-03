@@ -2,22 +2,23 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserMessage<'a> {
-	/// The JWT authentication token.
+	/// The JWT authorization token.
 	pub jwt: &'a str,
 	/// The receiver's user ID.
 	pub user_id: &'a str,
-	pub message_id: &'a str,
-	/// The content of the message encrypted with the receiver's key.
-	pub content: String,
+	/// A message id that is encrypted, preventing the server from seeing it.
+	pub signed_id: &'a [u8],
+	/// An encrypted message accessible only to the receiver.
+	pub contents: &'a [u8],
 }
 
 impl<'a> UserMessage<'a> {
-	pub fn new(jwt: &'a str, user_id: &'a str, message_id: &'a str, content: String) -> Self {
+	pub fn new(jwt: &'a str, user_id: &'a str, signed_id: &'a [u8], contents: &'a [u8]) -> Self {
 		Self {
 			jwt,
 			user_id,
-			message_id,
-			content,
+			signed_id,
+			contents,
 		}
 	}
 }
@@ -28,11 +29,13 @@ pub enum ClientMessage<'a> {
 	UserMessage(UserMessage<'a>),
 }
 
-impl<'a> ClientMessage<'a> {
-	pub fn user_message(jwt: &'a str, user_id: &'a str, message_id: &'a str, content: String) -> Self {
-		Self::UserMessage(UserMessage::new(jwt, user_id, message_id, content))
+impl<'a> From<UserMessage<'a>> for ClientMessage<'a> {
+	fn from(user_message: UserMessage<'a>) -> Self {
+		Self::UserMessage(user_message)
 	}
+}
 
+impl<'a> ClientMessage<'a> {
 	pub fn serialize(&self) -> Result<String, serde_json::Error> {
 		serde_json::to_string(&self)
 	}
