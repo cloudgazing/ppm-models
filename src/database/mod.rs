@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 /// Alice and Bob have a common shared secret key.
@@ -45,16 +46,23 @@ pub struct Message {
 	pub sender_id: String,
 	/// The contents of the message, encrypted.
 	pub message: Vec<u8>,
-	// pub timestamp: chrono::DateTime<chrono::Utc>,
+	pub timestamp: DateTime<Utc>,
 }
 
 impl Message {
-	pub fn new(message_id: String, chat_id: String, sender_id: String, message: Vec<u8>) -> Self {
+	pub fn new(
+		message_id: String,
+		chat_id: String,
+		sender_id: String,
+		message: Vec<u8>,
+		timestamp: DateTime<Utc>,
+	) -> Self {
 		Self {
 			message_id,
 			chat_id,
 			sender_id,
 			message,
+			timestamp,
 		}
 	}
 }

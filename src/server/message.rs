@@ -2,6 +2,7 @@ use crate::database;
 
 use super::error::MessageStatusError;
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 pub type ChatMessage = database::Message;
@@ -65,8 +66,14 @@ impl From<KeepAlive> for WsServerMessage {
 }
 
 impl WsServerMessage {
-	pub fn new_message(message_id: String, chat_id: String, sender_id: String, message: Vec<u8>) -> Self {
-		Self::ChatMessage(ChatMessage::new(message_id, chat_id, sender_id, message))
+	pub fn new_message(
+		message_id: String,
+		chat_id: String,
+		sender_id: String,
+		message: Vec<u8>,
+		timestamp: DateTime<Utc>,
+	) -> Self {
+		Self::ChatMessage(ChatMessage::new(message_id, chat_id, sender_id, message, timestamp))
 	}
 
 	pub fn message_status(message_id: String, status: Status) -> Self {
