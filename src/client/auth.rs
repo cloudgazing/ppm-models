@@ -1,26 +1,26 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct LoginData<'a> {
-	pub username: &'a str,
-	pub password: &'a str,
+pub struct LoginData {
+	pub username: String,
+	pub password: String,
 }
 
-impl<'a> LoginData<'a> {
-	pub fn new(username: &'a str, password: &'a str) -> Self {
+impl LoginData {
+	pub fn new(username: String, password: String) -> Self {
 		Self { username, password }
 	}
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct SignupData<'a> {
-	pub username: &'a str,
-	pub password: &'a str,
-	pub display_name: &'a str,
+pub struct SignupData {
+	pub username: String,
+	pub password: String,
+	pub display_name: String,
 }
 
-impl<'a> SignupData<'a> {
-	pub fn new(username: &'a str, password: &'a str, display_name: &'a str) -> Self {
+impl SignupData {
+	pub fn new(username: String, password: String, display_name: String) -> Self {
 		Self {
 			username,
 			password,
@@ -30,8 +30,7 @@ impl<'a> SignupData<'a> {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub enum Auth<'a> {
-	#[serde(borrow)]
-	Login(LoginData<'a>),
-	Signup(SignupData<'a>),
+pub enum Auth {
+	Login(LoginData),
+	Signup(SignupData),
 }

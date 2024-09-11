@@ -3,47 +3,39 @@ use super::error::{LoginError, SignupError, VerifyError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
-pub enum LoginConfirmation<'a> {
-	Success(&'a str),
+pub enum LoginConfirmation {
+	Success(String),
 	Error(LoginError),
 }
 
-impl<'a> LoginConfirmation<'a> {
-	pub fn success(token: &'a str) -> Self {
+impl LoginConfirmation {
+	pub fn success(token: String) -> Self {
 		Self::Success(token)
 	}
 
 	pub fn error(error: LoginError) -> Self {
 		Self::Error(error)
 	}
-
-	pub fn serialize(&self) -> Result<String, serde_json::Error> {
-		serde_json::to_string(self)
-	}
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub enum SignupConfirmation<'a> {
-	Success(&'a str),
+pub enum SignupConfirmation {
+	Success(String),
 	Error(SignupError),
 }
 
-impl<'a> SignupConfirmation<'a> {
-	pub fn success(token: &'a str) -> Self {
+impl SignupConfirmation {
+	pub fn success(token: String) -> Self {
 		Self::Success(token)
 	}
 
 	pub fn error(error: SignupError) -> Self {
 		Self::Error(error)
 	}
-
-	pub fn serialize(&self) -> Result<String, serde_json::Error> {
-		serde_json::to_string(self)
-	}
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum VerifyResponse {
-	Ok,
+	Ok { user_id: String, pin_hash: String },
 	Err(VerifyError),
 }
