@@ -2,7 +2,7 @@ use crate::database::raw::RawMessageBundle;
 
 use super::raw::{RawOwnUserInfo, RawSensitiveBundle, RawUserInfo};
 
-use sqlx::{sqlite::SqliteQueryResult, SqlitePool};
+use sqlx::SqlitePool;
 
 pub async fn check_username_availability(pool: &SqlitePool, username: String) -> Result<bool, sqlx::Error> {
 	let exists: i64 = sqlx::query_scalar!("SELECT EXISTS(SELECT 1 FROM users WHERE username = ?)", username)
@@ -134,8 +134,8 @@ pub async fn get_raw_chat_messages(pool: &SqlitePool, chat_id: Vec<u8>) -> Resul
 	.await
 }
 
-pub async fn add_raw_message(pool: &SqlitePool, bundle: RawMessageBundle) -> Result<SqliteQueryResult, sqlx::Error> {
-	sqlx::query!(
+pub async fn add_raw_message(pool: &SqlitePool, bundle: RawMessageBundle) -> Result<(), sqlx::Error> {
+	let res = sqlx::query!(
 		"INSERT INTO messages (message_id, chat_id, sender_id, message, timestamp) VALUES (?, ?, ?, ?, ?)",
 		bundle.message_id,
 		bundle.chat_id,
@@ -144,5 +144,11 @@ pub async fn add_raw_message(pool: &SqlitePool, bundle: RawMessageBundle) -> Res
 		bundle.timestamp
 	)
 	.execute(pool)
-	.await
+	.await?;
+
+	if res.rows_affected() == 1 {
+		Ok(())
+	} else {
+		Err(sqlx::Error::RowNotFound)
+	}
 }
