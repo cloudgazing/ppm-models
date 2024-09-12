@@ -17,16 +17,13 @@ pub async fn check_user_credentials(
 	username: String,
 	password: String,
 ) -> Result<bool, sqlx::Error> {
-	let pw_hash = blake3::hash(password.as_bytes()).as_bytes().to_vec();
+	let password_hash = blake3::hash(password.as_bytes()).as_bytes().to_vec();
 
-	let opt = sqlx::query_scalar!("SELECT password_hash FROM users WHERE username = ?", username)
-		.fetch_optional(pool)
+	let hash = sqlx::query_scalar!("SELECT password_hash FROM users WHERE username = ?", username)
+		.fetch_one(pool)
 		.await?;
 
-	match opt {
-		Some(hash) => Ok(hash == pw_hash),
-		None => Ok(false),
-	}
+	Ok(hash == password_hash)
 }
 
 pub async fn add_new_user(
@@ -35,11 +32,11 @@ pub async fn add_new_user(
 	password: String,
 	display_name: String,
 	pin_hash: Vec<u8>,
-) -> Result<SqliteQueryResult, sqlx::Error> {
+) -> Result<(), sqlx::Error> {
 	let user_id = uuid::Uuid::new_v4().as_bytes().to_vec();
 	let password_hash = blake3::hash(password.as_bytes()).as_bytes().to_vec();
 
-	sqlx::query!(
+	let res = sqlx::query!(
 		"INSERT INTO users (user_id, username, password_hash, display_name, pin_hash) VALUES (?, ?, ?, ?, ?)",
 		user_id,
 		username,
@@ -48,40 +45,46 @@ pub async fn add_new_user(
 		pin_hash
 	)
 	.execute(pool)
-	.await
+	.await?;
+
+	if res.rows_affected() == 1 {
+		Ok(())
+	} else {
+		Err(sqlx::Error::RowNotFound)
+	}
 }
 
 pub async fn get_raw_own_user_id(
 	pool: &SqlitePool,
 	username: String,
 	password_hash: Vec<u8>,
-) -> Result<Option<Vec<u8>>, sqlx::Error> {
+) -> Result<Vec<u8>, sqlx::Error> {
 	sqlx::query_scalar!(
 		"SELECT user_id FROM users WHERE username = ? AND password_hash = ?",
 		username,
 		password_hash
 	)
-	.fetch_optional(pool)
+	.fetch_one(pool)
 	.await
 }
 
-pub async fn get_raw_own_user_info(pool: &SqlitePool, user_id: Vec<u8>) -> Result<Option<RawOwnUserInfo>, sqlx::Error> {
+pub async fn get_raw_own_user_info(pool: &SqlitePool, user_id: Vec<u8>) -> Result<RawOwnUserInfo, sqlx::Error> {
 	sqlx::query_as!(
 		RawOwnUserInfo,
 		"SELECT user_id, display_name, pin_hash FROM users WHERE user_id = ?",
 		user_id,
 	)
-	.fetch_optional(pool)
+	.fetch_one(pool)
 	.await
 }
 
-pub async fn get_raw_user_info(pool: &SqlitePool, user_id: Vec<u8>) -> Result<Option<RawUserInfo>, sqlx::Error> {
+pub async fn get_raw_user_info(pool: &SqlitePool, user_id: Vec<u8>) -> Result<RawUserInfo, sqlx::Error> {
 	sqlx::query_as!(
 		RawUserInfo,
 		"SELECT user_id, display_name FROM users WHERE user_id = ?",
 		user_id
 	)
-	.fetch_optional(pool)
+	.fetch_one(pool)
 	.await
 }
 
@@ -95,23 +98,29 @@ pub async fn get_raw_user_info_vec(pool: &SqlitePool, user_ids: Vec<Vec<u8>>) ->
 
 	let mut query = sqlx::query_as::<_, RawUserInfo>(&query);
 
-	for user_id in user_ids {
+	for user_id in &user_ids {
 		query = query.bind(user_id);
 	}
 
-	query.fetch_all(pool).await
+	let res = query.fetch_all(pool).await?;
+
+	if res.len() != user_ids.len() {
+		return Err(sqlx::Error::RowNotFound);
+	}
+
+	Ok(res)
 }
 
 pub async fn get_raw_sensitive_bundle(
 	pool: &SqlitePool,
 	sensitive_hash: Vec<u8>,
-) -> Result<Option<RawSensitiveBundle>, sqlx::Error> {
+) -> Result<RawSensitiveBundle, sqlx::Error> {
 	sqlx::query_as!(
 		RawSensitiveBundle,
 		"SELECT sensitive_hash, sensitive_data FROM sensitive WHERE sensitive_hash = ?",
 		sensitive_hash
 	)
-	.fetch_optional(pool)
+	.fetch_one(pool)
 	.await
 }
 
