@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT user_id, display_name, pin_hash FROM users WHERE username = ? AND password_hash = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "user_id",
+        "ordinal": 0,
+        "type_info": "Blob"
+      },
+      {
+        "name": "display_name",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "pin_hash",
+        "ordinal": 2,
+        "type_info": "Blob"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9fe1cf31caf21088e6681acb7777f40b4c9ba840e51f9bec12caf3d1aa2de5c3"
+}

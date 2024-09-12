@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT user_id, display_name FROM users WHERE user_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "user_id",
+        "ordinal": 0,
+        "type_info": "Blob"
+      },
+      {
+        "name": "display_name",
+        "ordinal": 1,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "5af1fd8187d5fe5131eec14dea5ef7c7c83ff29e2f7632601d28c6c120f4b928"
+}

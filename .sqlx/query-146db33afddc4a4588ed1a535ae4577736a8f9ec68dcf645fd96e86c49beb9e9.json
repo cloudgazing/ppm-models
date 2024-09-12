@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT sensitive_hash, sensitive_data FROM sensitive WHERE sensitive_hash = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "sensitive_hash",
+        "ordinal": 0,
+        "type_info": "Blob"
+      },
+      {
+        "name": "sensitive_data",
+        "ordinal": 1,
+        "type_info": "Blob"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "146db33afddc4a4588ed1a535ae4577736a8f9ec68dcf645fd96e86c49beb9e9"
+}
