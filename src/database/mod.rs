@@ -1,4 +1,5 @@
 pub mod raw;
+#[cfg(not(target_arch = "wasm32"))]
 pub mod sqlite;
 
 use std::{collections::HashMap, string::FromUtf8Error};

@@ -1,8 +1,10 @@
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+#[cfg(not(target_arch = "wasm32"))]
 use sqlx::prelude::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, FromRow)]
+#[cfg_attr(not(target_arch = "wasm32"), derive(FromRow))]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RawUserInfo {
 	pub user_id: Vec<u8>,
 	pub display_name: String,
