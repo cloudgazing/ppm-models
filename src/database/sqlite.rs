@@ -124,3 +124,16 @@ pub async fn get_raw_chat_messages(pool: &SqlitePool, chat_id: Vec<u8>) -> Resul
 	.fetch_all(pool)
 	.await
 }
+
+pub async fn add_raw_message(pool: &SqlitePool, bundle: RawMessageBundle) -> Result<SqliteQueryResult, sqlx::Error> {
+	sqlx::query!(
+		"INSERT INTO messages (message_id, chat_id, sender_id, message, timestamp) VALUES (?, ?, ?, ?, ?)",
+		bundle.message_id,
+		bundle.chat_id,
+		bundle.sender_id,
+		bundle.message,
+		bundle.timestamp
+	)
+	.execute(pool)
+	.await
+}

@@ -52,7 +52,7 @@ impl OwnUserInfo {
 /// `chat_id` is a unique identifier that can be computed only by Bob and Alice.
 /// `sender_id` is an obfuscated user id that Alice and Bob can get using their shared secret.
 /// `message_id` is the encrypted text message, with a key from the receiver.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MessageBundle {
 	pub message_id: String,
 	pub chat_id: String,
