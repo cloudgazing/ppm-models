@@ -12,6 +12,23 @@ pub async fn check_username_availability(pool: &SqlitePool, username: String) ->
 	Ok(exists != 0)
 }
 
+pub async fn check_user_credentials(
+	pool: &SqlitePool,
+	username: String,
+	password: String,
+) -> Result<bool, sqlx::Error> {
+	let pw_hash = blake3::hash(password.as_bytes()).as_bytes().to_vec();
+
+	let opt = sqlx::query_scalar!("SELECT password_hash FROM users WHERE username = ?", username)
+		.fetch_optional(pool)
+		.await?;
+
+	match opt {
+		Some(hash) => Ok(hash == pw_hash),
+		None => Ok(false),
+	}
+}
+
 pub async fn add_new_user(
 	pool: &SqlitePool,
 	username: String,
@@ -34,18 +51,25 @@ pub async fn add_new_user(
 	.await
 }
 
-pub async fn get_raw_own_user_info(
+pub async fn get_raw_own_user_id(
 	pool: &SqlitePool,
 	username: String,
-	password: String,
-) -> Result<Option<RawOwnUserInfo>, sqlx::Error> {
-	let password_hash = blake3::hash(password.as_bytes()).as_bytes().to_vec();
-
-	sqlx::query_as!(
-		RawOwnUserInfo,
-		"SELECT user_id, display_name, pin_hash FROM users WHERE username = ? AND password_hash = ?",
+	password_hash: Vec<u8>,
+) -> Result<Option<Vec<u8>>, sqlx::Error> {
+	sqlx::query_scalar!(
+		"SELECT user_id FROM users WHERE username = ? AND password_hash = ?",
 		username,
 		password_hash
+	)
+	.fetch_optional(pool)
+	.await
+}
+
+pub async fn get_raw_own_user_info(pool: &SqlitePool, user_id: Vec<u8>) -> Result<Option<RawOwnUserInfo>, sqlx::Error> {
+	sqlx::query_as!(
+		RawOwnUserInfo,
+		"SELECT user_id, display_name, pin_hash FROM users WHERE user_id = ?",
+		user_id,
 	)
 	.fetch_optional(pool)
 	.await

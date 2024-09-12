@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT user_id, display_name, pin_hash FROM users WHERE username = ? AND password_hash = ?",
+  "query": "SELECT user_id, display_name, pin_hash FROM users WHERE user_id = ?",
   "describe": {
     "columns": [
       {
@@ -20,7 +20,7 @@
       }
     ],
     "parameters": {
-      "Right": 2
+      "Right": 1
     },
     "nullable": [
       false,
@@ -28,5 +28,5 @@
       false
     ]
   },
-  "hash": "9fe1cf31caf21088e6681acb7777f40b4c9ba840e51f9bec12caf3d1aa2de5c3"
+  "hash": "daed753534be89b56dff5d40fc01de41ba0b290a56241da2f1ab073053444c3c"
 }

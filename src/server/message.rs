@@ -1,11 +1,9 @@
-use crate::database;
-
 use super::error::MessageStatusError;
 
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
+use crate::database::MessageBundle;
 
-pub type ChatMessage = database::Message;
+use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum Status {
@@ -42,14 +40,14 @@ impl KeepAlive {
 /// Contains all the websocket messages the server sends to the client.
 #[derive(Debug, Deserialize, Serialize)]
 pub enum WsServerMessage {
-	ChatMessage(ChatMessage),
+	MessageBundle(MessageBundle),
 	MessageStatus(MessageStatus),
 	KeepAlive(KeepAlive),
 }
 
-impl From<ChatMessage> for WsServerMessage {
-	fn from(chat_message: ChatMessage) -> Self {
-		Self::ChatMessage(chat_message)
+impl From<MessageBundle> for WsServerMessage {
+	fn from(chat_message: MessageBundle) -> Self {
+		Self::MessageBundle(chat_message)
 	}
 }
 
@@ -66,14 +64,14 @@ impl From<KeepAlive> for WsServerMessage {
 }
 
 impl WsServerMessage {
-	pub fn new_message(
+	pub fn message_bundle(
 		message_id: String,
 		chat_id: String,
 		sender_id: String,
 		message: Vec<u8>,
-		timestamp: DateTime<Utc>,
+		timestamp: NaiveDateTime,
 	) -> Self {
-		Self::ChatMessage(ChatMessage::new(message_id, chat_id, sender_id, message, timestamp))
+		Self::MessageBundle(MessageBundle::new(message_id, chat_id, sender_id, message, timestamp))
 	}
 
 	pub fn message_status(message_id: String, status: Status) -> Self {

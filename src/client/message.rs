@@ -1,6 +1,7 @@
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
+/// A `sender_id` it is not sent as the server gets it from the JWT.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WsMessage {
 	/// Authorization token.
@@ -9,10 +10,9 @@ pub struct WsMessage {
 	receiver_id: String,
 	message_id: String,
 	chat_id: String,
-	sender_id: String,
 	/// An encypted message.
 	message: Vec<u8>,
-	timestamp: DateTime<Utc>,
+	timestamp: NaiveDateTime,
 }
 
 impl WsMessage {
@@ -21,16 +21,14 @@ impl WsMessage {
 		receiver_id: String,
 		message_id: String,
 		chat_id: String,
-		sender_id: String,
 		message: Vec<u8>,
-		timestamp: DateTime<Utc>,
+		timestamp: NaiveDateTime,
 	) -> Self {
 		Self {
 			jwt,
 			receiver_id,
 			message_id,
 			chat_id,
-			sender_id,
 			message,
 			timestamp,
 		}
