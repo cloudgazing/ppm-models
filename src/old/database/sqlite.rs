@@ -1,6 +1,4 @@
-use crate::database::raw::RawMessageBundle;
-
-use super::raw::{RawOwnUserInfo, RawSensitiveBundle, RawUserInfo};
+use super::raw::{RawMessageBundle, RawOwnUserInfo, RawSensitiveBundle, RawUserInfo};
 
 use sqlx::SqlitePool;
 

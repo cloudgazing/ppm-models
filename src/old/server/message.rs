@@ -1,6 +1,6 @@
-use super::error::MessageStatusError;
+use crate::old::database::MessageBundle;
 
-use crate::database::MessageBundle;
+use super::error::MessageStatusError;
 
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};

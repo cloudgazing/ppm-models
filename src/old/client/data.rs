@@ -16,7 +16,7 @@ pub struct OwnMessage {
 	pub is_sent: bool,
 }
 
-impl<'a> OwnMessage {
+impl OwnMessage {
 	pub fn new(message_id: String, text: String, timestamp: DateTime<Local>, is_sent: bool) -> Self {
 		Self {
 			message_id,
@@ -55,7 +55,7 @@ pub struct OtherMessage {
 	pub timestamp: DateTime<Local>,
 }
 
-impl<'a> OtherMessage {
+impl OtherMessage {
 	pub fn new(message_id: String, text: String, timestamp: DateTime<Local>) -> Self {
 		Self {
 			message_id,
