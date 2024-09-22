@@ -13,8 +13,8 @@ pub struct Message {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ClientSocketMessage {
-	token: String,
-	receiver_id: String,
-	encrypted_message_id: String,
-	contents: Vec<u8>,
+	pub token: String,
+	pub receiver_id: String,
+	pub encrypted_message_id: String,
+	pub contents: Vec<u8>,
 }
