@@ -2,8 +2,11 @@ pub mod auth;
 
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
+use tsify_next::Tsify;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Tsify)]
+#[serde(rename_all = "camelCase")]
+#[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct Message {
 	pub message_id: String,
 	pub user_id: String,
