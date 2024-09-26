@@ -14,10 +14,30 @@ pub struct Message {
 	pub timestamp: DateTime<Local>,
 }
 
+impl Message {
+	pub fn new(message_id: String, user_id: String, text: String, timestamp: DateTime<Local>) -> Self {
+		Self {
+			message_id,
+			user_id,
+			text,
+			timestamp,
+		}
+	}
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ClientSocketMessage {
-	pub token: String,
 	pub receiver_id: String,
 	pub encrypted_message_id: String,
 	pub contents: Vec<u8>,
+}
+
+impl ClientSocketMessage {
+	pub fn new(receiver_id: String, encrypted_message_id: String, contents: Vec<u8>) -> Self {
+		Self {
+			receiver_id,
+			encrypted_message_id,
+			contents,
+		}
+	}
 }

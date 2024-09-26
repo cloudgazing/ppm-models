@@ -9,7 +9,7 @@ pub struct TokenClaims {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub enum MessageStatusConfirmation {
+pub enum MessageConfirmation {
 	Success,
 	Error,
 }
@@ -18,5 +18,5 @@ pub enum MessageStatusConfirmation {
 pub enum ServerSocketMessage {
 	/// A `Client::Message` as a byte array.
 	NewMessage(Vec<u8>),
-	MessageStatusConfirmation(MessageStatusConfirmation),
+	MessageConfirmation(MessageConfirmation),
 }
