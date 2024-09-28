@@ -1,2 +1,2 @@
-pub mod new;
-pub mod old;
+pub mod client;
+pub mod server;

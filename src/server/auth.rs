@@ -1,9 +1,11 @@
 use serde::{Deserialize, Serialize};
+#[cfg(all(target_arch = "wasm32"))]
 use tsify_next::Tsify;
 
-#[derive(Debug, Deserialize, Serialize, Tsify)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type", rename_all = "camelCase")]
-#[tsify(into_wasm_abi)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi))]
 pub enum AuthResponse {
 	Success {
 		user_id: String,

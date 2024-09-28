@@ -2,11 +2,13 @@ pub mod auth;
 
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
+#[cfg(all(target_arch = "wasm32"))]
 use tsify_next::Tsify;
 
-#[derive(Debug, Deserialize, Serialize, Tsify)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
 pub struct Message {
 	pub message_id: String,
 	pub user_id: String,

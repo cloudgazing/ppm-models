@@ -1,7 +1,7 @@
-use serde::{Deserialize, Serialize};
-
 pub mod auth;
 pub mod error;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct TokenClaims {
