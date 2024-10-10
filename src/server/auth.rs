@@ -1,11 +1,14 @@
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-#[cfg(all(target_arch = "wasm32"))]
+#[cfg(feature = "wasm")]
 use tsify_next::Tsify;
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(tag = "type", rename_all = "camelCase")]
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi))]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(tag = "type", rename_all = "camelCase"))]
+#[cfg_attr(feature = "wasm", derive(Tsify))]
+#[cfg_attr(feature = "wasm", tsify(into_wasm_abi))]
+#[cfg_attr(feature = "napi", napi_derive::napi)]
 pub enum AuthResponse {
 	Success {
 		user_id: String,

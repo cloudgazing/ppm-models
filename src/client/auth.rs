@@ -1,6 +1,8 @@
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct LoginData {
 	pub username: String,
 	pub password: String,
@@ -12,7 +14,8 @@ impl LoginData {
 	}
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct SignupData {
 	pub username: String,
 	pub password: String,

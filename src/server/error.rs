@@ -1,3 +1,4 @@
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 pub const SERVER_INTERNAL_ERROR: &str = "Internal server error";
@@ -10,7 +11,9 @@ pub const SIGNUP_USERNAME_TAKEN: &str = "Username already taken";
 
 pub const MESSAGE_USER_NOT_FOUND: &str = "User not found";
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub enum LoginError {
 	Internal,
 	InvalidFormat,
@@ -29,7 +32,9 @@ impl LoginError {
 	}
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub enum SignupError {
 	Internal,
 	InvalidFormat,
@@ -48,7 +53,9 @@ impl SignupError {
 	}
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub enum MessageStatusError {
 	Internal,
 	Claims,
@@ -65,7 +72,9 @@ impl MessageStatusError {
 	}
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub enum VerifyError {
 	InvalidFormat,
 	Claims,
