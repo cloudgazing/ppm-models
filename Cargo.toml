@@ -1,10 +1,11 @@
 [package]
 name = "skyline-api"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 # license = "MIT OR Apache-2.0"
 
 [dependencies]
+actix-web = { version = "4.9.0", optional = true }
 chrono = { version = "0.4.38", features = ["serde"], optional = true }
 napi = { version = "3.0.0-alpha.16", features = ["tokio_rt", "chrono_date", "chrono", "napi9"], optional = true }
 napi-derive = { version = "3.0.0-alpha.15", optional = true }
@@ -19,6 +20,7 @@ tsify-next = { version = "0.5.4", features = ["js"], optional = true }
 
 [features]
 default = ["chrono", "serde"]
+actix = ["dep:actix-web"]
 chrono = ["dep:chrono"]
 napi = ["dep:napi-derive", "dep:napi"]
 serde = ["dep:serde", "dep:serde_json"]
