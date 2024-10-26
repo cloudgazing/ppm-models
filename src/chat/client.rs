@@ -1,5 +1,3 @@
-pub mod auth;
-
 #[cfg(feature = "chrono")]
 use chrono::{DateTime, Local};
 #[cfg(feature = "serde")]

@@ -1,20 +1,20 @@
 [package]
-name = "ppm-models"
-version = "0.6.6"
+name = "skyline-api"
+version = "0.0.1"
 edition = "2021"
-license = "MIT OR Apache-2.0"
+# license = "MIT OR Apache-2.0"
 
 [dependencies]
 chrono = { version = "0.4.38", features = ["serde"], optional = true }
-napi = { version = "3.0.0-alpha.13", features = ["tokio_rt", "chrono_date", "chrono", "napi9"], optional = true }
-napi-derive = { version = "3.0.0-alpha.13", optional = true }
-serde = { version = "1.0.210", features = ["derive"], optional = true }
-serde_json = { version = "1.0.128", optional = true }
+napi = { version = "3.0.0-alpha.16", features = ["tokio_rt", "chrono_date", "chrono", "napi9"], optional = true }
+napi-derive = { version = "3.0.0-alpha.15", optional = true }
+serde = { version = "1.0.213", features = ["derive"], optional = true }
+serde_json = { version = "1.0.132", optional = true }
 # ed25519-dalek = { version = "2.1.1", features = ["serde"] }
 # x25519-dalek = { version = "2.0.1", features = ["serde"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = { version = "0.2.94", optional = true }
+wasm-bindgen = { version = "0.2.95", optional = true }
 tsify-next = { version = "0.5.4", features = ["js"], optional = true }
 
 [features]

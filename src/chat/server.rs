@@ -1,6 +1,3 @@
-pub mod auth;
-pub mod error;
-
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
