@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct AuthResponseSuccess {
+	/// A unique ID value assigned to each user. This is a UUID v4 value encoded as a UTF-8 string.
 	pub user_id: String,
 	pub display_name: String,
 	pub auth_token: String,
@@ -105,7 +106,7 @@ impl Responder for AuthSignupResponse {
 
 	fn respond_to(self, _: &actix_web::HttpRequest) -> actix_web::HttpResponse<Self::Body> {
 		let status = match self {
-			AuthSignupResponse::Success(_) => StatusCode::OK,
+			AuthSignupResponse::Success(_) => StatusCode::CREATED,
 			AuthSignupResponse::BadRequest => StatusCode::BAD_REQUEST,
 			AuthSignupResponse::Conflict => StatusCode::CONFLICT,
 			AuthSignupResponse::ServerError => StatusCode::INTERNAL_SERVER_ERROR,
